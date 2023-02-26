@@ -9,7 +9,8 @@ jobs:
     if: github.ref_type == 'tag'
     strategy:
       fail-fast: true
-      matrix: [ubuntu-20.04]
+      matrix:
+        os-environment: [ubuntu-20.04]
     runs-on: ${{ matrix.os-environment }}
     steps:
       - uses: actions/checkout@v3
