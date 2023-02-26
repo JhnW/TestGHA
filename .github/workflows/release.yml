@@ -6,7 +6,7 @@ on:
        - v*
 jobs:
   rel:
-    if: github.ref_name == 'main'
+    if: github.ref_type == 'tag'
     strategy:
       fail-fast: false
       matrix:
