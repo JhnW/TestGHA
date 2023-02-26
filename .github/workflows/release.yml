@@ -2,10 +2,34 @@ name: Release
 
 on:
   create:
-     tags:        
-       - v*
+    tags:
+      - v*
 jobs:
+  check_is_valid_target:
+    if: github.ref_type == 'tag'
+    strategy:
+      fail-fast: true
+      matrix: [ubuntu-20.04]
+    runs-on: ${{ matrix.os-environment }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checker
+        shell: bash
+        run: |
+          onProtectedBranch=false
+          branches=$(git branch -r --contains tags/$GITHUB_REF_NAME)
+          for branch in $branches; do
+            if [[ $branch == "origin/main" ]]; then
+              onProtectedBranch=true
+            fi
+          done
+          
+          if [ "$onProtectedBranch" == false ]; then
+            echo "Tag is not on protected branch. Abort build."
+            exit 1
+          fi
   rel:
+    needs: check_is_valid_target
     if: github.ref_type == 'tag'
     strategy:
       fail-fast: false
