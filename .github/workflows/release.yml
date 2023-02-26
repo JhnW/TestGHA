@@ -1,10 +1,11 @@
 name: Release
 
 on:
-  create:
-     tags:        
-       - v*
-     branches: [ main ]
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches: [ main ]    
+    tags:        
+      - v*
 jobs:
   tests:
     strategy:
